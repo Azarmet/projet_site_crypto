@@ -11,12 +11,14 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    background: #161b22;
+    padding: 10px 50px;
+    background: #161b22b9;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
+
+
 
 header .logo {
     font-size: 1.5em;
@@ -48,33 +50,49 @@ header nav ul li a.cta {
 
 /* Hero Section */
 .hero {
+    position: relative;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* Prend toute la hauteur de l'écran */
-    background-image: url('/assets/images/bg-hero.webp');
+    background-image: url('/assets/images/bg-hero.png');
     background-size: cover;
     background-position: center;
     color: #ffffff;
-    text-align: center;
-    padding: 0 20px; /* Espacement pour éviter que le texte touche les bords */
-    position: relative; /* Nécessaire pour des overlays */
+    padding: 50px 20px;
 }
 
-.hero::after {
+
+/* Overlay semi-transparent */
+.hero::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Overlay sombre pour rendre le texte lisible */
+    background: rgba(54, 54, 54, 0.25); /* Noir avec transparence (0.6) */
+    z-index: 1; /* Positionne l'overlay derrière le contenu */
+}
+
+/* Smooth transition between sections */
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(22, 27, 34, 1));
     z-index: 1;
 }
 
+/* Contenu principal divisé en deux colonnes */
 .hero-content {
-    position: relative; /* Pour que le contenu soit au-dessus de l'overlay */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
     z-index: 2;
 }
 
@@ -85,10 +103,28 @@ header nav ul li a.cta {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ajoute de la lisibilité */
 }
 
+/* Colonne gauche */
+.hero-left {
+    flex: 1;
+    padding-right: 20px;
+    margin-top: -200px;
+}
+.hero-left h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
 .hero p {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.hero-left p {
     font-size: 1.5rem;
     margin-bottom: 30px;
 }
+
 
 .btn-primary {
     background: #58a6ff;
@@ -104,6 +140,37 @@ header nav ul li a.cta {
     background: #1f6feb;
 }
 
+/* Colonne droite */
+.hero-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.portfolio-card {
+    background: rgba(22, 27, 34, 0.8); /* Fond semi-transparent */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    color: #c9d1d9;
+}
+
+.portfolio-card h3 {
+    font-size: 2rem;
+    margin-top: 0px;
+    color: #58a6ff;
+}
+
+/* Conteneur pour le graphique */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
 /* Price Ticker */
 .price-ticker {
     background: #161b22;
@@ -139,43 +206,89 @@ header nav ul li a.cta {
 
 /* Features Section */
 .features {
-    background: #0d1117;
-    padding: 50px 20px;
+    position: relative;
+    min-height: 100vh;
+    background-image: url('/assets/images/bg-features.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Fixe l'image lors du défilement */
+    color: #ffffff;
     text-align: center;
+    padding: 50px 20px;
+    overflow: hidden; /* Assure que rien ne dépasse */
 }
+
 
 .features h2 {
     font-size: 2.5rem;
     margin-bottom: 40px;
-    color: #58a6ff;
+    color: #ffffff;
 }
 
 .feature-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 50px;
     justify-content: center;
 }
 
 .feature {
-    background: #161b22;
+    background: rgba(22, 27, 34, 0.8); /* Semi-transparent box */
     padding: 20px;
     border-radius: 10px;
-    width: 300px;
+    width: 400px;
+    height: 200px;
     text-align: left;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    z-index: 3; /* S'assure que les cartes sont interactives */
 }
 
 .feature h3 {
     font-size: 1.5rem;
     margin-bottom: 10px;
-    color: #58a6ff;
+    color: #ffffff;
 }
 
 .feature p {
     font-size: 1rem;
     line-height: 1.5;
     color: #c9d1d9;
+}
+
+/* Effet au survol (hover) */
+.feature:hover {
+    transform: translateY(-10px); /* Soulève légèrement l'élément */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Accentue l'ombre */
+    z-index: 4; /* Met la carte au-dessus du contenu voisin si nécessaire */
+}
+
+.features::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(22, 27, 34, 1));
+    z-index: 1; /* Place le dégradé au-dessus du voile */
+}
+
+/* Voile blanc transparent */
+.features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(80, 80, 80, 0.082); /* Blanc transparent */
+    z-index: 0; /* Place le voile derrière tout */
+}
+
+.features-content {
+    position: relative; /* S'assure que le contenu est au-dessus des pseudo-éléments */
+    z-index: 2;
 }
 
 /* Footer */
