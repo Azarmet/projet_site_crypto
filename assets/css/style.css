@@ -107,27 +107,35 @@ header nav ul li a.cta {
 /* Price Ticker */
 .price-ticker {
     background: #161b22;
-    padding: 10px 0;
-    overflow: hidden;
+    overflow: hidden; /* Cache les éléments en dehors du conteneur */
+    position: relative;
+    height: 40px; /* Hauteur de la barre */
 }
 
-.price-ticker .ticker {
+.ticker {
     display: flex;
     gap: 30px;
-    justify-content: center;
-    animation: scroll 20s linear infinite;
-    color: #58a6ff;
-    font-size: 1.2rem;
+    white-space: nowrap; /* Empêche les retours à la ligne */
+    will-change: transform; /* Optimisation des performances */
+    animation: scroll 10s linear infinite; /* Animation par défaut */
 }
 
+.ticker span {
+    font-size: 1.2rem;
+    color: #58a6ff;
+}
+
+/* Animation CSS */
 @keyframes scroll {
     0% {
-        transform: translateX(100%);
+        transform: translateX(0);
     }
     100% {
         transform: translateX(-100%);
     }
 }
+
+
 
 /* Features Section */
 .features {
@@ -177,4 +185,25 @@ footer {
     background: #161b22;
     color: #8b949e;
     font-size: 0.9rem;
+}
+
+.crypto {
+    font-size: 1.2rem;
+    margin-right: 20px;
+    display: inline-block;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.crypto.green {
+    color: rgb(16, 192, 16);
+    font-weight: bold;
+}
+
+.crypto.red {
+    color: rgb(238, 39, 39);
+    font-weight: bold;
+}
+
+.crypto:hover {
+    transform: scale(1.1);
 }
