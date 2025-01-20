@@ -1,0 +1,180 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #161b22;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo {
+    font-size: 1.5em;
+    color: #58a6ff;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+header nav ul li {
+    display: inline;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #c9d1d9;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+header nav ul li a:hover,
+header nav ul li a.cta {
+    color: #58a6ff;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Prend toute la hauteur de l'écran */
+    background-image: url('/assets/images/bg-hero.webp');
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    text-align: center;
+    padding: 0 20px; /* Espacement pour éviter que le texte touche les bords */
+    position: relative; /* Nécessaire pour des overlays */
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Overlay sombre pour rendre le texte lisible */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative; /* Pour que le contenu soit au-dessus de l'overlay */
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ajoute de la lisibilité */
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.btn-primary {
+    background: #58a6ff;
+    color: #161b22;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: #1f6feb;
+}
+
+/* Price Ticker */
+.price-ticker {
+    background: #161b22;
+    padding: 10px 0;
+    overflow: hidden;
+}
+
+.price-ticker .ticker {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    animation: scroll 20s linear infinite;
+    color: #58a6ff;
+    font-size: 1.2rem;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Features Section */
+.features {
+    background: #0d1117;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #58a6ff;
+}
+
+.feature-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.feature {
+    background: #161b22;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #58a6ff;
+}
+
+.feature p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #c9d1d9;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #161b22;
+    color: #8b949e;
+    font-size: 0.9rem;
+}
