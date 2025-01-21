@@ -76,8 +76,15 @@ function addPaginationControls(articles, page) {
 
 // Fonction pour remonter en haut des articles
 function scrollToTop() {
-    newsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const offset = -80; // Décalage de 20 pixels au-dessus
+    const topPosition = newsContainer.getBoundingClientRect().top + window.scrollY + offset;
+
+    window.scrollTo({
+        top: topPosition,
+        behavior: 'smooth'
+    });
 }
+
 
 
 // Fonction pour récupérer les articles depuis la base de données
@@ -127,7 +134,7 @@ function saveArticlesToDatabase(articles) {
         }
     })
     .catch(error => {
-        console.error('Erreur réseau ou JSON lors de l’enregistrement :', error);
+        console.error('Erreur réseau ou JSON lors de lenregistrement :', error);
     });
 }
 
