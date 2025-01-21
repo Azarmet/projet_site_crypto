@@ -6,29 +6,35 @@ body {
     color: #c9d1d9;
 }
 
-/* Header */
+/* Styles pour le header */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 50px;
     background: #161b22dc;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
+/* Partie supérieure du header (logo + menu) */
+.header-top {
+    display: flex;
+    justify-content: space-between; /* Espace entre le logo et le menu */
+    align-items: center; /* Aligne les éléments verticalement */
+    padding: 10px 30px;
+}
 
-
+/* Logo */
 header .logo {
     font-size: 1.5em;
     color: #58a6ff;
 }
 
+/* Menu */
 header nav ul {
     list-style: none;
     display: flex;
     gap: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 header nav ul li {
@@ -47,6 +53,31 @@ header nav ul li a.cta {
     color: #58a6ff;
     font-weight: bold;
 }
+
+/* Barre des prix */
+.price-ticker {
+    background: #ffffff;
+    overflow: hidden; /* Cache les éléments hors de la barre */
+    height: 20px; /* Hauteur de la barre */
+}
+
+.ticker {
+    display: flex;
+    gap: 30px;
+    white-space: nowrap; /* Empêche le retour à la ligne */
+    animation: scroll 10s linear infinite; /* Défilement continu */
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
 
 /* Hero Section */
 .hero {
@@ -177,32 +208,30 @@ header nav ul li a.cta {
     overflow: hidden; /* Cache les éléments en dehors du conteneur */
     position: relative;
     height: 40px; /* Hauteur de la barre */
+
 }
 
 .ticker {
     display: flex;
     gap: 30px;
     white-space: nowrap; /* Empêche les retours à la ligne */
-    will-change: transform; /* Optimisation des performances */
-    animation: scroll 10s linear infinite; /* Animation par défaut */
+    will-change: transform; /* Optimise l'animation */
 }
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0); /* Début du défilement */
+    }
+    100% {
+        transform: translateX(-50%); /* Fin après la moitié du contenu */
+    }
+}
+
 
 .ticker span {
     font-size: 1.2rem;
     color: #58a6ff;
 }
-
-/* Animation CSS */
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-
 
 /* Features Section */
 .features {
@@ -322,6 +351,11 @@ footer {
 }
 
 /* News Page */
+
+#ticker_news {
+    position: relative;
+}
+
 .news {
     position: relative; /* Nécessaire pour le positionnement relatif */
     padding: 50px 20px;
@@ -478,3 +512,4 @@ footer {
     background-color: #cccccc;
     cursor: not-allowed;
 }
+

@@ -41,16 +41,28 @@ async function fetchCryptoPrices() {
 
 function duplicateContent() {
     const ticker = document.querySelector('.ticker');
+    
+    // S'assurer que le contenu de la barre existe
+    if (!ticker || ticker.innerHTML.trim() === '') {
+        console.error('La barre des prix est vide.');
+        return;
+    }
+    
     const tickerWidth = ticker.scrollWidth; // Largeur totale du contenu
-    ticker.innerHTML += ticker.innerHTML; // Dupliquer le contenu pour créer la boucle
-    adjustAnimationSpeed(tickerWidth); // Ajuster la vitesse
+
+    // Dupliquer le contenu pour créer l'effet de boucle
+    ticker.innerHTML += ticker.innerHTML;
+
+    // Ajuster la vitesse de l'animation en fonction de la largeur totale
+    adjustAnimationSpeed(tickerWidth * 2); // Multiplie par 2 pour inclure le contenu dupliqué
 }
 
 function adjustAnimationSpeed(width) {
     const ticker = document.querySelector('.ticker');
-    const animationDuration = width / 50; // Ajuster la vitesse (50 = vitesse en px/s)
-    ticker.style.animationDuration = `${animationDuration}s`; // Appliquer la durée de l'animation
+    const animationDuration = width / 50; // Ajuste la durée selon la largeur et vitesse
+    ticker.style.animation = `scroll ${animationDuration}s linear infinite`; // Définit une animation infinie
 }
+
 
 // Initialisation
 fetchCryptoPrices();

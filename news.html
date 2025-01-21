@@ -9,16 +9,22 @@
 <body>
     <!-- Header -->
     <header>
-        <div class="logo">CryptoInvest</div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="news.html" class="active">News</a></li>
-                <li><a href="faq.html">FAQ</a></li>
-                <li><a href="login.html" class="cta">Sign Up</a></li>
-            </ul>
-        </nav>
+        <div class="header-top">
+            <div class="logo">CryptoInvest</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="news.html" class="active">News</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="login.html" class="cta">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="price-ticker">
+            <div class="ticker" id="ticker_news">
+            </div>
+        </div>
     </header>
 
     <!-- News Section -->
@@ -38,5 +44,6 @@
         <p>&copy; 2025 CryptoInvest. All Rights Reserved.</p>
     </footer>
     <script src="assets/js/news.js"></script>
+    <script src="assets/js/api_price_ticker.js"></script>
 </body>
 </html>

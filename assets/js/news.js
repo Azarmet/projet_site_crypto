@@ -35,7 +35,7 @@ function displayArticles(articles, page = 1) {
             <div class="news-content">
                 <h2>${article.title}</h2>
                 <p>${article.description || 'Description non disponible.'}</p>
-                <a href="${article.url}" target="_blank">Lire la suite</a>
+                <a href="${article.url}" target="_blank" rel="noopener noreferrer">Lire la suite</a>
             </div>
         `;
 
@@ -45,6 +45,7 @@ function displayArticles(articles, page = 1) {
     // Ajouter les contrôles de pagination
     addPaginationControls(articles, page);
 }
+
 
 // Fonction pour ajouter des contrôles de pagination
 function addPaginationControls(articles, page) {
@@ -143,17 +144,35 @@ function fetchCryptoNews() {
     fetch(cryptoApiUrl)
         .then(response => response.json())
         .then(data => {
+            // Filtrer et transformer les articles
             const newArticles = data.results.filter(article =>
                 article.image_url && // Vérifie que l'image existe
                 article.title && // Vérifie que le titre existe
-                !cryptoArticles.some(existing => existing.title === article.title) // Filtre les doublons
-            );
-            saveArticlesToDatabase(newArticles); // Enregistrer les nouveaux articles
+                article.link && // Vérifie que le lien existe (champ "link" dans l'API)
+                !cryptoArticles.some(existing => existing.title === article.title) // Évite les doublons
+            ).map(article => ({
+                title: article.title,
+                description: article.description || 'Description non disponible.',
+                image_url: article.image_url,
+                published_at: article.pub_date || new Date().toISOString(), // Utilise la date actuelle si manquante
+                url: article.link, // Utilise "link" comme URL
+                source: article.source || 'Inconnu' // Définit "Inconnu" si la source est absente
+            }));
+
+
+            if (newArticles.length === 0) {
+                console.warn('Aucun article à enregistrer.');
+                return;
+            }
+
+            saveArticlesToDatabase(newArticles); // Enregistre les articles dans la base de données
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des actualités cryptographiques :', error);
         });
 }
+
+
 
 // Fonction pour récupérer les actualités financières
 function fetchFinanceNews() {
@@ -184,13 +203,15 @@ function fetchFinanceNews() {
 
 // Gestion des onglets
 document.getElementById('crypto-news-btn').addEventListener('click', () => {
-    fetchArticlesFromDatabase(); // Charger depuis la base de données
+    fetchArticlesFromDatabase(); // Charger les articles crypto depuis la base
     setActiveTab('crypto-news-btn');
 });
 
 document.getElementById('finance-news-btn').addEventListener('click', () => {
+    displayArticles([]); // Laisser vide pour l'instant
     setActiveTab('finance-news-btn');
 });
+
 
 // Fonction pour activer l'onglet sélectionné
 function setActiveTab(tabId) {
