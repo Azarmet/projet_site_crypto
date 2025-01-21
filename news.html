@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Crypto Investment Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">CryptoInvest</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="news.html" class="active">News</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="login.html" class="cta">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- News Section -->
+    <main class="news">
+        <h1>Latest News</h1>
+        <div class="news-tabs">
+            <button class="tab active" id="crypto-news-btn" data-category="crypto">Crypto News</button>
+            <button class="tab" id="finance-news-btn" data-category="finance">Global Finance</button>
+        </div>
+        <div class="news-content" id="news-container">
+            <!-- Articles will be dynamically loaded here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 CryptoInvest. All Rights Reserved.</p>
+    </footer>
+    <script src="assets/js/news.js"></script>
+</body>
+</html>
