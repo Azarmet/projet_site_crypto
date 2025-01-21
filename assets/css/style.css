@@ -55,7 +55,7 @@ header nav ul li a.cta {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('/assets/images/bg-hero.png');
+    background-image: url('http://localhost/php_project/Projet_Fin/projet/assets/images/bg-hero.png');
     background-size: cover;
     background-position: center;
     color: #ffffff;
@@ -208,7 +208,7 @@ header nav ul li a.cta {
 .features {
     position: relative;
     min-height: 100vh;
-    background-image: url('/assets/images/bg-features.png');
+    background-image: url('http://localhost/php_project/Projet_Fin/projet/assets/images/bg-features.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* Fixe l'image lors du défilement */
@@ -427,4 +427,32 @@ footer {
 
 .news-content a:hover {
     text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0; /* Espacement entre les boutons et les articles */
+    min-width: 500px;
+}
+
+.pagination button {
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }

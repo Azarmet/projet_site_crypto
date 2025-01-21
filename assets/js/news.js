@@ -52,23 +52,33 @@ function addPaginationControls(articles, page) {
     paginationContainer.className = 'pagination';
 
     // Bouton "Précédent"
-    if (page > 1) {
-        const prevButton = document.createElement('button');
-        prevButton.textContent = 'Précédent';
-        prevButton.onclick = () => displayArticles(articles, page - 1);
-        paginationContainer.appendChild(prevButton);
-    }
+    const prevButton = document.createElement('button');
+    prevButton.textContent = 'Précédent';
+    prevButton.disabled = page <= 1; // Désactive le bouton si c'est la première page
+    prevButton.onclick = () => {
+        displayArticles(articles, page - 1);
+        scrollToTop(); // Remonte en haut des articles
+    };
+    paginationContainer.appendChild(prevButton);
 
     // Bouton "Suivant"
-    if (page * articlesPerPage < articles.length) {
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Suivant';
-        nextButton.onclick = () => displayArticles(articles, page + 1);
-        paginationContainer.appendChild(nextButton);
-    }
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Suivant';
+    nextButton.disabled = page * articlesPerPage >= articles.length; // Désactive le bouton si c'est la dernière page
+    nextButton.onclick = () => {
+        displayArticles(articles, page + 1);
+        scrollToTop(); // Remonte en haut des articles
+    };
+    paginationContainer.appendChild(nextButton);
 
     newsContainer.appendChild(paginationContainer);
 }
+
+// Fonction pour remonter en haut des articles
+function scrollToTop() {
+    newsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 
 // Fonction pour récupérer les articles depuis la base de données
 function fetchArticlesFromDatabase() {
@@ -90,21 +100,35 @@ function fetchArticlesFromDatabase() {
 
 // Enregistrer les articles dans la base de données
 function saveArticlesToDatabase(articles) {
+
+    if (!articles || articles.length === 0) {
+        console.warn('Aucun article à enregistrer.');
+        return; // Arrête l'exécution si aucun article n'est présent
+    }
+
     fetch('http://localhost/php_project/Projet_Fin/projet/backend/api/save_crypto_news.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ articles }) // Envoyer les articles au backend
+        body: JSON.stringify({ articles }) // Transforme en JSON
     })
-    .then(response => response.json())
+    .then(async (response) => {
+        const rawText = await response.text();
+            if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status} ${response.statusText}`);
+        }
+
+        return JSON.parse(rawText); // Parse le JSON si la réponse est valide
+    })
     .then(data => {
         if (data.success) {
-            console.log('Articles enregistrés avec succès dans la base de données.');
-            fetchArticlesFromDatabase(); // Rafraîchir les articles affichés
+            fetchArticlesFromDatabase(); // Rafraîchit les articles
         } else {
-            console.error('Erreur lors de l’enregistrement :', data.error);
+            console.error('Erreur renvoyée par le backend :', data.error);
         }
     })
-    .catch(error => console.error('Erreur réseau lors de lenregistrement :', error));
+    .catch(error => {
+        console.error('Erreur réseau ou JSON lors de l’enregistrement :', error);
+    });
 }
 
 // Modifier la récupération des actualités Crypto
@@ -112,14 +136,11 @@ function fetchCryptoNews() {
     fetch(cryptoApiUrl)
         .then(response => response.json())
         .then(data => {
-            console.log('Articles récupérés depuis l’API Crypto :', data.results); // Log pour vérifier les articles
             const newArticles = data.results.filter(article =>
                 article.image_url && // Vérifie que l'image existe
                 article.title && // Vérifie que le titre existe
                 !cryptoArticles.some(existing => existing.title === article.title) // Filtre les doublons
             );
-
-            console.log('Articles filtrés pour enregistrement :', newArticles); // Log pour vérifier les articles après filtrage
             saveArticlesToDatabase(newArticles); // Enregistrer les nouveaux articles
         })
         .catch(error => {
@@ -161,7 +182,6 @@ document.getElementById('crypto-news-btn').addEventListener('click', () => {
 });
 
 document.getElementById('finance-news-btn').addEventListener('click', () => {
-    fetchFinanceNews(); // Charger directement depuis l'API
     setActiveTab('finance-news-btn');
 });
 
@@ -175,6 +195,5 @@ function setActiveTab(tabId) {
 document.addEventListener('DOMContentLoaded', () => {
     fetchArticlesFromDatabase(); // Récupère les articles depuis la base
     fetchCryptoNews();           // Récupère les articles Crypto depuis l'API
-    fetchFinanceNews();          // Récupère les articles Finance depuis l'API
 });
 
