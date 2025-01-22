@@ -3,29 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Investment Platform</title>
+    <title>DASHBOARD</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="logo">CryptoInvest</div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="faq.html">FAQ</a></li>
-                <li><a href="login.html" class="cta">Sign Up</a></li>
-            </ul>
-        </nav>
+        <div class="header-top">
+            <div class="logo">CryptoInvest</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="news.html" class="active">News</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="login.html" class="cta">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="price-ticker">
+            <div class="ticker" id="ticker_news">
+            </div>
+        </div>
     </header>
-
-
+    <div class="dashboard">
+        <section class="welcome-section">
+            <h1>Welcome, <span id="user-name">[User Name]</span>!</h1>
+            <p>Your Portfolio Value: <span id="portfolio-value">$10,000</span> (<span id="portfolio-change">+5%</span> today)</p>
+        </section>
+        
+        <section class="summary-section">
+            <h2>Portfolio Summary</h2>
+            <div class="summary-stats">
+                <div class="stat">
+                    <h3>Total Value</h3>
+                    <p id="total-value">$10,000</p>
+                </div>
+                <div class="stat">
+                    <h3>Best Performing Asset</h3>
+                    <p id="best-asset">Bitcoin (BTC) +8%</p>
+                </div>
+                <div class="stat">
+                    <h3>Worst Performing Asset</h3>
+                    <p id="worst-asset">Ethereum (ETH) -2%</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="dashboard">
+        <!-- Onglets -->
+        <div class="tabs">
+            <button class="tab-link active" data-tab="portfolio-tab">Portfolio</button>
+            <button class="tab-link" data-tab="favorites-tab">Favorites</button>
+        </div>
+        <div class="portfolio-form">
+            <h3>Add Asset to Portfolio</h3>
+            <form id="add-asset-form">
+                <input type="text" id="symbol" placeholder="Symbol (e.g., BTCUSDT)" required />
+                <input type="number" id="quantity" placeholder="Quantity" step="any" required />
+                <input type="number" id="purchase-price" placeholder="Purchase Price" step="any" required />
+                <button type="submit">Add to Portfolio</button>
+            </form>
+        </div>
+        
+        <!-- Contenu des onglets -->
+        <div class="tab-content active" id="portfolio-tab">
+            <!-- Contenu de l'onglet Portfolio -->
+            <section class="portfolio-section">
+                <!-- Tableau du portefeuille -->
+                <table class="crypto-table">
+                    <thead>
+                        <tr>
+                            <th>Cryptocurrency</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total Value</th>
+                            <th>Change (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crypto-list">
+                        <!-- Les lignes seront générées dynamiquement -->
+                    </tbody>
+                </table>
+        
+                <!-- Graphiques -->
+                <div class="portfolio-charts">
+                    <div class="chart-item" style="flex: 30%;">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                    <div class="chart-item" style="flex: 70%;">
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-period="1D">1 Day</button>
+                            <button class="chart-btn" data-period="1W">1 Week</button>
+                            <button class="chart-btn" data-period="1M">1 Month</button>
+                            <button class="chart-btn" data-period="1Y">1 Year</button>
+                            <button class="chart-btn" data-period="5Y">5 Years</button>
+                        </div>
+                        <canvas id="globalPerformanceChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+    
+        <div class="tab-content" id="favorites-tab">
+            <!-- Contenu de l'onglet Favorites -->
+            <section class="favorites-section">
+                <h2>Your Favorites</h2>
+                <table class="favorites-table">
+                    <thead>
+                        <tr>
+                            <th>Cryptocurrency</th>
+                            <th>Price</th>
+                            <th>Change (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="favorites-list">
+                        <!-- Les lignes seront générées dynamiquement -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+    
+    
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 CryptoInvest. All Rights Reserved.</p>
     </footer>
     <script src="assets/js/api_price_ticker.js"></script>
+    <script src="assets/js/dashboard.js" ></script>
 </body>
 </html>
