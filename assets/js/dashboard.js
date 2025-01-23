@@ -27,14 +27,40 @@ async function updatePortfolio() {
         if (portfolioData.length === 0) {
             // Si aucune donnée, afficher un message
             const emptyRow = document.createElement('tr');
-            emptyRow.innerHTML = `<td colspan="5" style="text-align: center;">No portfolio created yet. Add assets to your portfolio.</td>`;
+            emptyRow.innerHTML = `<td colspan="6" style="text-align: center;">No portfolio created yet. Add assets to your portfolio.</td>`;
             cryptoList.appendChild(emptyRow);
+
+            // Mettre à jour le résumé
+            document.getElementById('total-value').textContent = `$0.00`;
+            document.getElementById('best-asset').textContent = `N/A`;
+            document.getElementById('worst-asset').textContent = `N/A`;
             return; // Stopper l'exécution
         }
 
-        // Ajouter les données au tableau si présentes
+        let totalValue = 0;
+        let bestAsset = { symbol: null, change: -Infinity };
+        let worstAsset = { symbol: null, change: Infinity };
+
         portfolioData.forEach((crypto) => {
-            const change = ((crypto.price - crypto.purchase_price) / crypto.purchase_price * 100).toFixed(2); // Calcul du changement
+            const purchasePrice = parseFloat(crypto.purchase_price);
+            const change = purchasePrice
+                ? ((crypto.price - purchasePrice) / purchasePrice * 100).toFixed(2)
+                : "N/A";
+
+            // Calcul du totalValue
+            totalValue += parseFloat(crypto.total_value);
+
+            // Déterminer le meilleur actif
+            if (change !== "N/A" && parseFloat(change) > bestAsset.change) {
+                bestAsset = { symbol: crypto.symbol, change: parseFloat(change) };
+            }
+
+            // Déterminer le pire actif
+            if (change !== "N/A" && parseFloat(change) < worstAsset.change) {
+                worstAsset = { symbol: crypto.symbol, change: parseFloat(change) };
+            }
+
+            // Ajouter les données au tableau
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${crypto.symbol}</td>
@@ -42,25 +68,35 @@ async function updatePortfolio() {
                 <td>${crypto.quantity}</td>
                 <td>$${parseFloat(crypto.total_value).toFixed(2)}</td>
                 <td class="${change >= 0 ? 'positive' : 'negative'}">${change}%</td>
-
+                <td class="delete-cell">
+                    <span class="delete-icon" data-symbol="${crypto.symbol}">&#128465;</span>
+                </td>
             `;
             cryptoList.appendChild(row);
         });
 
+        // Mettre à jour le résumé
+        document.getElementById('total-value').textContent = `$${totalValue.toFixed(2)}`;
+        document.getElementById('best-asset').textContent = bestAsset.symbol
+            ? `${bestAsset.symbol} (${bestAsset.change.toFixed(2)}%)`
+            : `N/A`;
+        document.getElementById('worst-asset').textContent = worstAsset.symbol
+            ? `${worstAsset.symbol} (${worstAsset.change.toFixed(2)}%)`
+            : `N/A`;
+
         // Mettre à jour le graphique en camembert
         const ctx = document.getElementById('portfolioChart').getContext('2d');
-        // Détruire l'ancien graphique s'il existe
         if (portfolioChartInstance) {
             portfolioChartInstance.destroy();
         }
-        
+
         portfolioChartInstance = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: portfolioData.map(crypto => crypto.symbol),
                 datasets: [{
                     data: portfolioData.map(crypto => parseFloat(crypto.total_value)),
-                    backgroundColor: ['#f7931a', '#627eea', '#3cc8c8'],
+                    backgroundColor: ['#f7931a', '#627eea', '#3cc8c8', '#ff6384', '#36a2eb'],
                 }],
             },
         });
@@ -68,6 +104,7 @@ async function updatePortfolio() {
         console.error('Erreur lors de la mise à jour du portefeuille :', error);
     }
 }
+
 
 document.querySelectorAll('.tab-link').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -159,6 +196,35 @@ document.getElementById('add-asset-form').addEventListener('submit', async (e) =
         }
     } catch (error) {
         console.error('Erreur lors de l’ajout de l’actif :', error);
+    }
+});
+
+
+document.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('delete-icon')) {
+        const symbol = event.target.dataset.symbol;
+
+        if (confirm(`Are you sure you want to remove ${symbol} from your portfolio?`)) {
+            try {
+                const response = await fetch('http://localhost/php_project/Projet_Fin/projet/backend/api/delete_from_portfolio.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symbol }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert(`${symbol} has been removed from your portfolio.`);
+                    updatePortfolio(); // Rafraîchir le tableau
+                } else {
+                    alert('Error removing asset: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la suppression de l’actif :', error);
+            }
+        }
     }
 });
 

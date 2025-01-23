@@ -16,15 +16,23 @@ try {
     SELECT 
         p.symbol, 
         p.quantity, 
-        p.purchase_price, -- Ajout de la colonne purchase_price
+        p.purchase_price, 
         c.price, 
         (p.quantity * c.price) AS total_value
     FROM user_portfolios p
-    JOIN crypto_prices c ON p.symbol = c.symbol
+    JOIN (
+        SELECT symbol, price 
+        FROM crypto_prices
+        WHERE timestamp = (
+            SELECT MAX(timestamp) 
+            FROM crypto_prices AS cp 
+            WHERE cp.symbol = crypto_prices.symbol
+        )
+    ) c ON p.symbol = c.symbol
     WHERE p.user_id = :user_id
 ");
-    $stmt->execute([':user_id' => 1]);
-    $portfolioData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute([':user_id' => 1]);
+$portfolioData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($portfolioData);
 } catch (PDOException $e) {
